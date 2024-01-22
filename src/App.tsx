@@ -2,29 +2,20 @@ import React, {FC, useContext, useEffect, useState} from 'react';
 import LoginForm from "./components/LoginForm";
 import {Context} from "./index";
 import {observer} from "mobx-react-lite";
-import {IUser} from "./models/iUser";
-import UserService from "./services/UserService";
-import {autorun, reaction} from "mobx";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from "./pages/Home";
 
-const App: FC = () => {
+
+
+const App: React.FC = () => {
     const {store} = useContext(Context);
-    const [users, setUsers] = useState<IUser[]>([]);
 
     useEffect(() => {
         console.log("useEffect is running");
         if (localStorage.getItem('token')) {
             store.checkAuth();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    async function getUsers() {
-        try {
-            const response = await UserService.fetchUsers();
-            setUsers(response.data);
-        } catch (e) {
-            console.log(e);
-        }
-    }
 
     if (store.isLoading) {
         return <div>Загрузка...</div>
@@ -34,23 +25,15 @@ const App: FC = () => {
         return (
             <div>
                 <LoginForm/>
-                <button onClick={getUsers}>Получить пользователей</button>
             </div>
         );
     }
-
     return (
-        <div>
-            <h1>{store.isAuth ? `Пользователь авторизован ${store.user.email}` : 'АВТОРИЗУЙТЕСЬ'}</h1>
-            <h1>{store.user.isActivated ? 'Аккаунт подтвержден по почте' : 'ПОДТВЕРДИТЕ АККАУНТ!!!!'}</h1>
-            <button onClick={() => store.logout()}>Выйти</button>
-            <div>
-                <button onClick={getUsers}>Получить пользователей</button>
-            </div>
-            {users.map(user =>
-                <div key={user.email}>{user.email}</div>
-            )}
-        </div>
+    <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Home/>}/>
+        </Routes>
+    </BrowserRouter>
     );
 };
 
