@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent } from 'react';
 import UserService from '../services/UserService';
+import './Components.css';
 
 const UploadProfilePicture = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -34,8 +35,10 @@ const UploadProfilePicture = () => {
     };
 
     return (
-        <div>
-            <input type="file" onChange={handleFileChange} />
+        <div className='upload-pic'>
+            <div className="file-input">
+                <input type="file" onChange={handleFileChange} />
+            </div>
             <button onClick={handleUpload}>Upload File</button>
             {uploadStatus && <p>{uploadStatus}</p>}
         </div>

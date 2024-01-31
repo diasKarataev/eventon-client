@@ -3,6 +3,7 @@ import {makeAutoObservable} from "mobx";
 import AuthService from "../services/AuthService";
 import axios from 'axios';
 import {AuthResponse} from "../models/AuthResponse";
+import { Navigate } from 'react-router-dom';
 import {API_URL} from "../http";
 
 export default class Store {
@@ -33,6 +34,7 @@ export default class Store {
             localStorage.setItem('token', response.data.accessToken);
             this.setAuth(true);
             this.setUser(response.data.user);
+            window.location.href = ('/');
         } catch (e) {
             console.log(e);
         }
@@ -45,6 +47,8 @@ export default class Store {
             localStorage.setItem('token', response.data.accessToken);
             this.setAuth(true);
             this.setUser(response.data.user);
+            window.location.href = ('/');
+
         } catch (e) {
             console.log(e);
         }
@@ -56,6 +60,7 @@ export default class Store {
             localStorage.removeItem('token');
             this.setAuth(false);
             this.setUser({} as IUser);
+            window.location.href = ('/login');
         } catch (e) {
             console.log(e);
         }

@@ -1,0 +1,98 @@
+:root {
+    --main-color: #4caf50;
+    --bg-color: #f9f9f9;
+    --secondary-color: #45a049;
+    --text-color: #333;
+}
+
+.container-profile {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.container-profile h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-info {
+    display: flex;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    margin-right: 20px;
+    flex: 0 0 250px;
+}
+
+.profile-details {
+    flex: 1;
+}
+
+.profile-details p {
+    margin-bottom: 10px;
+}
+
+.profile-picture img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+}
+
+.role-button {
+    margin-bottom: 20px;
+}
+
+.admin-button,
+.user-button {
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.admin-button:hover,
+.user-button:hover {
+    background-color: var(--secondary-color);
+}
+
+.ticket-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.ticket-header {
+    margin-top: 30px;
+}
+
+.ticket {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.qr-code {
+    margin-top: 20px;
+}
+
+.back-link {
+    font-size: 30px;
+    margin-top: 20px;
+}
+
+.back-link a {
+    color: var(--main-color);
+    text-decoration: none;
+}
+
+.back-link a:hover {
+    color: var(--secondary-color);
+}

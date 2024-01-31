@@ -1,0 +1,35 @@
+:root {
+  --main-color: #4caf50;
+  --bg-color: #f9f9f9;
+  --secondary-color: #45a049;
+  --text-color: #333;
+}
+
+.upload-pic {
+    display: flex;
+    align-items: center;
+    max-width: 800px;
+    margin-top: 20px;
+}
+
+.upload-pic .file-input {
+    flex: 1;
+    margin-right: 15px;
+}
+
+.upload-pic button {
+    border: none;
+    background-color: var(--main-color);
+    color: var(--bg-color);
+    border-radius: 10px;
+    padding: 10px;   
+    font-size: 18px;
+}
+
+.upload-pic button:hover {
+    background-color: var(--secondary-color);
+}
+
+.upload-pic p {
+    margin: 0;
+}
