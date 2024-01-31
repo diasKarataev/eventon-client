@@ -8,7 +8,10 @@ import { observer } from 'mobx-react-lite';
 import { API_URL } from '../http';
 import QRCode from 'qrcode.react';
 import UploadProfilePicture from "../components/UploadProfilePicture";
-import {Context} from "../index"; // Import the QR code library
+
+import './Profile.css';
+import { Context } from '../index';
+import { TbArrowBackUp } from "react-icons/tb";
 
 const ProfilePage: React.FC = () => {
     const { userId } = useParams<{ userId?: string }>();
@@ -66,44 +69,47 @@ const ProfilePage: React.FC = () => {
         }
     };
 
-
     return (
-        <div>
-            <h1>Profile Page</h1>
-            {userData ? (
-                <div>
-                    <p>Email: {userData.email}</p>
-                    <p>Profile Picture:</p>
-                    <p>{store.user.role}</p>
-                    {userData.profilePictureId != null ? (
-                        <p><img src={`${API_URL}/image/${userData.profilePictureId}`} alt="Profile"/></p>
-                    ) : (
-                        <p>No profile picture</p>
-                    )}
-
-                    {store.user.role === 'ADMIN' ? (
-                        <button onClick={handleMakeUser}>Стать юзером</button>
-                    ) : (
-                        <button onClick={handleMakeAdmin}>Хочу быть стать админом!</button>
-                    )}
-                    <p><Link to="/">Back</Link></p>
-                </div>
-            ) : (
-                <p>...</p>
-            )}
-            <UploadProfilePicture></UploadProfilePicture>
-            <h2>Tickets</h2>
-            <div>
-                {userTickets.map((ticket, index) => (
-                    <div key={ticket.id}>
-                        <p>Билет на</p>
-                        <p>{eventNames[index]}</p>
-                        <QRCode value={API_URL + '/tickets/check-ticket/' + ticket.activationLink}/>
+        <>
+            <div className="container-profile">
+                <div className="back-link"><a href='/'><TbArrowBackUp/></a></div>
+                <h1>Profile Page</h1>
+                <div className="profile-info">
+                    <div className="profile-picture">
+                        {userData?.profilePictureId != null ? (
+                        <img src={`${API_URL}/image/${userData.profilePictureId}`} alt="Profile" />
+                        ) : (
+                            <p>No profile picture</p>
+                        )}
                     </div>
-                ))}
+                    <div className="profile-details">
+                        <p>Email: {userData?.email}</p>
+                        <p>Name: Eren</p>
+                        <p>Surname: Yeager</p>
+                        <p>Password: Infinitive123</p>
 
+                        <div className="role-button">
+                            {store.user.role === 'ADMIN' ? (
+                                <button className="admin-button" onClick={handleMakeUser}>Make User</button>
+                            ) : (
+                                <button className="user-button" onClick={handleMakeAdmin}>Make Admin</button>
+                            )}
+                        </div>
+
+                    </div>
+                </div>
+                <UploadProfilePicture/>
+                <h2 className='ticket-header'>Tickets</h2>
+                <div className="ticket-container">
+                    {userTickets.map((ticket, index) => (
+                        <div className="ticket" key={ticket.id}>
+                            <h4>{eventNames[index]}</h4>
+                            <QRCode className="qr-code" value={API_URL + '/tickets/check-ticket/' + ticket.activationLink} />
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

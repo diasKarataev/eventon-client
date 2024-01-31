@@ -2,6 +2,7 @@
 
 import React, { useState, ChangeEvent } from 'react';
 import EventService from '../services/EventService';
+import './Components.css';
 
 interface UploadEventPictureProps {
     eventId: string;
@@ -40,7 +41,7 @@ const UploadEventPicture: React.FC<UploadEventPictureProps> = ({ eventId }) => {
     };
 
     return (
-        <div>
+        <div className='upload-pic'>
             <input type="file" onChange={handleFileChange} />
             <button onClick={handleUpload}>Upload File</button>
             {uploadStatus && <p>{uploadStatus}</p>}
