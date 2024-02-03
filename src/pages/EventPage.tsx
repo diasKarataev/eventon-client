@@ -4,7 +4,6 @@ import { Container, Row, Col, Button, Form, Card, Image } from 'react-bootstrap'
 import EventService from '../services/EventService';
 import { IEvent } from '../models/iEvent';
 import { Context } from "../index";
-import UploadEventPicture from "../components/UploadEventPicture";
 import { API_URL } from "../http";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {observer} from "mobx-react-lite";
@@ -45,17 +44,6 @@ const EventPage: React.FC = () => {
             }
         } catch (error) {
             console.error('Error buying ticket:', error);
-        }
-    };
-
-    const handleDeleteImage = async (imageId: string) => {
-        try {
-            const response = await EventService.deleteImage(imageId);
-            // Обновите состояние или выполните другие действия после успешного удаления
-            console.log('Image deleted successfully:', response.data);
-            window.location.reload();
-        } catch (error) {
-            console.error('Error deleting image:', error);
         }
     };
 
@@ -102,9 +90,6 @@ const EventPage: React.FC = () => {
                                         <Card className="mb-3">
                                             <Image src={`${API_URL}/image/${imageId}`} alt={`Event Image ${imageId}`} fluid style={{objectFit: 'cover', height: '100px'}}/>
                                             <Card.Body>
-                                                <Button variant="danger" onClick={() => handleDeleteImage(imageId)}>
-                                                    Удалить
-                                                </Button>
                                                 <Link to={`${API_URL}/image/${imageId}`} className="btn btn-success mt-3">
                                                     Посмотреть
                                                 </Link>
@@ -117,9 +102,6 @@ const EventPage: React.FC = () => {
                             )}
                         </Row>
                     </Col>
-                    <Row>
-                        <UploadEventPicture eventId={eventId!} />
-                    </Row>
                 </Row>
             ) : (
                 <p>Loading...</p>

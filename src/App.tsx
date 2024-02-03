@@ -11,7 +11,7 @@ import ProfilePage from './pages/Profile';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import AdminPage from './pages/admin/AdminPage';
+import AdminPage from './pages/AdminPage';
 import Dashboard from "./components/admin/Dashboard";
 import Users from "./components/admin/Users";
 import Events from "./components/admin/Events";

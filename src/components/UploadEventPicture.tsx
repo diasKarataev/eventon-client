@@ -2,7 +2,6 @@
 
 import React, { useState, ChangeEvent } from 'react';
 import EventService from '../services/EventService';
-import './Components.css';
 
 interface UploadEventPictureProps {
     eventId: string;

@@ -1,8 +1,8 @@
 import React, { useContext} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {observer} from "mobx-react-lite";
-import {Context} from "../../index";
-import {API_URL} from "../../http";
+import {Context} from "../index";
+import {API_URL} from "../http";
 import {Link, useLocation, Outlet, Route, Routes} from "react-router-dom";
 
 const AdminPage: React.FC = () => {
@@ -68,11 +68,23 @@ const AdminPage: React.FC = () => {
                             Orders
                         </Link>
                     </li>
+                    <li className="nav-item">
+                        <Link to="/admin/mailing" className={`nav-link ${isActive("/admin/mailing")}`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 className="bi bi-envelope-arrow-up me-2" viewBox="0 0 16 16">
+                                <path
+                                    d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4.5a.5.5 0 0 1-1 0V5.383l-7 4.2-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h5.5a.5.5 0 0 1 0 1H2a2 2 0 0 1-2-1.99zm1 7.105 4.708-2.897L1 5.383zM1 4v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1"/>
+                                <path
+                                    d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.354 1.25 1.25a.5.5 0 0 1-.708.708L13 12.207V14a.5.5 0 0 1-1 0v-1.717l-.28.305a.5.5 0 0 1-.737-.676l1.149-1.25a.5.5 0 0 1 .722-.016"/>
+                            </svg>
+                            Mailing
+                        </Link>
+                    </li>
                 </ul>
                 <div className="mt-auto bg-secondary">
                     <ul className="nav nav-pills flex-column mb-auto">
                         <li className="nav-item">
-                            <a href="/" className="nav-link text-white" aria-current="page">
+                            <a href="/public" className="nav-link text-white" aria-current="page">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                      className="bi bi-arrow me-2" viewBox="0 0 16 16">
                                     <path
