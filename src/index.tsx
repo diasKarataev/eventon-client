@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Store from './store/store'
-
+import { BrowserRouter as Router } from 'react-router-dom';
 
 interface State {
     store: Store

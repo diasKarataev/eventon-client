@@ -1,41 +1,53 @@
-import {Link} from "react-router-dom";
-import {API_URL} from "../http";
-import {useContext} from "react";
-import {Context} from "../index";
+import { Link } from "react-router-dom";
+import { API_URL } from "../http";
+import React, { useContext } from "react";
+import { Context } from "../index";
 
 const Navbar = () => {
     const { store } = useContext(Context);
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <div className="container">
-                <a className="navbar-brand" href="index.html">
-                    <Link to={`/`}>
-                        <img src="logo.png" alt="logo" style={{ width: '100px' }} />
-                    </Link>
-                </a>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarNav">
-                    <ul className="navbar-nav ms-auto">
-                        <p className="me-2">{store.isAuth ? `${store.user.email}` : ''}</p>
-                        <li className="nav-item me-2">
-                            <Link to={`/profile`}>
-                                {store.user.profilePictureId ?
+        <div className="container">
+            <nav className="py-3 mb-3 border-bottom">
+                <div className="container-fluid d-flex justify-content-between align-items-center">
+                    <div>
+                        <Link to={`/`}>
+                            <img
+                                src="logo.png"
+                                alt="logo"
+                                style={{ maxWidth: '100%', height: 'auto', width: '100px' }}
+                                className="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-body-emphasis text-decoration-none dropdown-toggle"
+                            />
+                        </Link>
+                    </div>
+
+                    <div className="d-flex align-items-center">
+                        <form className="me-3" role="search">
+                            <input type="search" className="form-control" placeholder="Search..." aria-label="Search" style={{ maxWidth: '150px' }} />
+                        </form>
+                        <div className="me-2">{store.user.email}</div>
+                        <div className="flex-shrink-0 dropdown">
+                            <Link to={`/`} className="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                {store.user.profilePictureId ? (
                                     <img src={`${API_URL}/image/${store.user.profilePictureId}`} alt="mdo" width="35" height="35" className="rounded-circle" />
-                                    : ''}
+                                ) : (
+                                    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="mdo" width="35" height="35" className="rounded-circle" />
+                                )}
                             </Link>
-                        </li>
-                        <li className="nav-item">
-                            <button className="btn btn-success" onClick={() => store.logout()}>
-                                Logout
-                            </button>
-                        </li>
-                    </ul>
+                            <ul className="dropdown-menu text-small shadow">
+                                <li><Link to={`/profile`} className="dropdown-item">Profile</Link></li>
+                                <li><Link to={`/settings`} className="dropdown-item">Settings</Link></li>
+                                <li><a href="/admin" className="dropdown-item" style={{ color: 'red' }}>Admin panel</a></li>
+                                <li>
+                                    <hr className="dropdown-divider"></hr>
+                                </li>
+                                <li><a className="dropdown-item" onClick={() => store.logout()}>Sign out</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </div>
     );
 };
 

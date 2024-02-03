@@ -2,6 +2,7 @@ import React, {FC, useContext, useState} from 'react';
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import './Auth.css'
+import {Link} from "react-router-dom";
 
 const Login: FC = () => {
     const [email,setEmail] = useState<string>('');
@@ -31,7 +32,7 @@ const Login: FC = () => {
                 Login
             </button>
             <p className="link">
-                Don't have an account? <a href="/signup">Sign up</a>
+                Don't have an account? <Link to = {'/signup'}>Sign up</Link>
             </p>
         </div>
         </div>

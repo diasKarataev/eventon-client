@@ -8,4 +8,6 @@ export interface ITicket {
     seat_number: string;
     activationLink: string;
     order_id: string;
+    isActivated : boolean;
+    invoice_id: string;
 }
