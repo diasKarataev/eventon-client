@@ -84,7 +84,7 @@ const AdminPage: React.FC = () => {
                 <div className="mt-auto bg-secondary">
                     <ul className="nav nav-pills flex-column mb-auto">
                         <li className="nav-item">
-                            <a href="/public" className="nav-link text-white" aria-current="page">
+                            <a href="/" className="nav-link text-white" aria-current="page">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                      className="bi bi-arrow me-2" viewBox="0 0 16 16">
                                     <path
@@ -115,7 +115,7 @@ const AdminPage: React.FC = () => {
                         <li>
                             <hr className="dropdown-divider"/>
                         </li>
-                        <li><a className="dropdown-item" href="#">Sign out</a></li>
+                        <li><a className="dropdown-item" onClick={() => store.logout()}>Sign out</a></li>
                     </ul>
                 </div>
             </div>

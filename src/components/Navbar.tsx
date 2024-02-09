@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { API_URL } from "../http";
 import React, { useContext } from "react";
 import { Context } from "../index";
-
 const Navbar = () => {
     const { store } = useContext(Context);
-
+console.log(process.env.LOGO_URL)
     return (
         <div className="container">
             <nav className="py-3 mb-3 border-bottom">
@@ -13,7 +12,7 @@ const Navbar = () => {
                     <div>
                         <Link to={`/`}>
                             <img
-                                src="logo.png"
+                                src= "https://i.imgur.com/Aga9kO7.png"
                                 alt="logo"
                                 style={{ maxWidth: '100%', height: 'auto', width: '100px' }}
                                 className="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-body-emphasis text-decoration-none dropdown-toggle"
@@ -37,9 +36,11 @@ const Navbar = () => {
                             <ul className="dropdown-menu text-small shadow">
                                 <li><Link to={`/profile`} className="dropdown-item">Profile</Link></li>
                                 <li><Link to={`/settings`} className="dropdown-item">Settings</Link></li>
-                                <li><a href="/admin" className="dropdown-item" style={{ color: 'red' }}>Admin panel</a></li>
+                                {store.user.role == "ADMIN" ?
+                                    <li><a href="/admin" className="dropdown-item" style={{color: 'red'}}>Admin
+                                        panel</a></li> : ''}
                                 <li>
-                                    <hr className="dropdown-divider"></hr>
+                                <hr className="dropdown-divider"></hr>
                                 </li>
                                 <li><a className="dropdown-item" onClick={() => store.logout()}>Sign out</a></li>
                             </ul>

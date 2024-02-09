@@ -28,7 +28,6 @@ const ProfilePage: React.FC = () => {
                 setUserData(userData.data);
                 setUserTickets(userTickets.data);
 
-                // Fetch event names for each ticket
                 const names = await Promise.all(userTickets.data.map((ticket) => getEventNameById(ticket.event)));
                 setEventNames(names);
             } catch (error) {
@@ -49,24 +48,19 @@ const ProfilePage: React.FC = () => {
         }
     };
 
-    const handleMakeAdmin = async () => {
-        try {
-            await UserService.makeAdmin();
-            // You might want to refresh the user data or take other actions
-            window.location.reload();
-        } catch (error) {
-            console.error('Error making user an admin:', error);
-        }
-    };
+    const calculateAge = (birthDate: string | undefined): number | null => {
+        if (!birthDate) return null;
 
-    const handleMakeUser = async () => {
-        try {
-            await UserService.makeUser();
-            // You might want to refresh the user data or take other actions
-            window.location.reload();
-        } catch (error) {
-            console.error('Error making user a regular user:', error);
+        const birthDateObj = new Date(birthDate);
+        const today = new Date();
+        let age = today.getFullYear() - birthDateObj.getFullYear();
+        const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+            age--;
         }
+
+        return age;
     };
 
     return (
@@ -79,40 +73,40 @@ const ProfilePage: React.FC = () => {
                         {userData?.profilePictureId != null ? (
                             <img src={`${API_URL}/image/${userData.profilePictureId}`} alt="Profile"/>
                         ) : (
-                            <p>No profile picture</p>
+                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Profile"/>
                         )}
                     </div>
                     <div className="profile-details">
                         <p>Email: {userData?.email}</p>
                         <p>Name: {userData?.name}</p>
                         <p>Surname: {userData?.surname}</p>
-                        <p>Birthdate: {userData?.birthDate}</p>
+                        {userData?.birthDate && (
+                            <p>Age: {calculateAge(userData.birthDate)}</p>
+                        )}
+                        {store.user.role == "ADMIN" ? <p>Role: <a style={{color: 'red'}}>{store.user.role}</a></p> : ''}
                         {store.user.isActivated ? '' : <p style={{color: 'red'}}>Активируйте аккаунт по почте</p>}
-
-                        <div className="btn-success">
-                            {store.user.role === 'ADMIN' ? (
-                                <button className="btn-success" onClick={handleMakeUser}>Make User</button>
-                            ) : (
-                                <button className="btn-success" onClick={handleMakeAdmin}>Make Admin</button>
-                            )}
-                        </div>
-
                     </div>
                 </div>
                 <UploadProfilePicture/>
                 <h2 className='ticket-header'>Tickets</h2>
                 <div className="ticket-container">
-                    {userTickets
-                        .filter(ticket => ticket.isPayed && !ticket.isActivated)
-                        .map((ticket, index) => (
-                            <div className="ticket" key={ticket.id}>
-                                <>
-                                    <h4>{eventNames[index]}</h4>
-                                    <QRCode className="qr-code"
-                                            value={API_URL + '/tickets/check-ticket/' + ticket.activationLink}/>
-                                </>
-                            </div>
-                        ))}
+                    {userTickets.length > 0 ? (
+                        userTickets
+                            .filter(ticket => ticket.isPayed && !ticket.isActivated)
+                            .map((ticket, index) => (
+                                <div className="ticket" key={ticket.id}>
+                                    <>
+                                        <h4>{eventNames[index]}</h4>
+                                        <QRCode
+                                            className="qr-code"
+                                            value={API_URL + '/tickets/check-ticket/' + ticket.activationLink}
+                                        />
+                                    </>
+                                </div>
+                            ))
+                    ) : (
+                        <p style={{textAlign: 'center'}}>You have no tickets</p>
+                    )}
                 </div>
                 <div>
                     {userTickets.some(ticket => !ticket.isPayed && !ticket.isActivated) && (

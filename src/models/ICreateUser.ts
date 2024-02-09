@@ -1,10 +1,9 @@
-export interface IUser {
+export interface ICreateUser {
     email: string;
-    isActivated: boolean;
-    id: string;
-    profilePictureId: string;
     role: string;
     password: string;
     name: string;
     surname: string;
+    birthDate: string;
+    roleOptions: string[]
 }

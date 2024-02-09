@@ -17,6 +17,7 @@ import Users from "./components/admin/Users";
 import Events from "./components/admin/Events";
 import Orders from "./components/admin/Orders";
 
+
 const App: FC = () => {
     const { store } = useContext(Context);
 
@@ -54,6 +55,8 @@ const App: FC = () => {
                         <Route path="/" element={<Navigate to="/login" />} />
                     </>
                 )}
+                {/* Redirect to home if the route is not matched */}
+                <Route path="/*" element={<Navigate to="/" />} />
             </Routes>
             {store.isAuth && (pathname !== '/admin' && !pathname.startsWith('/admin/')) && <Footer />}
         </BrowserRouter>

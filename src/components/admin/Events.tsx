@@ -92,6 +92,12 @@ const Events: FC = () => {
 
 
     const openCreateModal = () => {
+        setNewEvent({
+            title: '',
+            description: '',
+            capacity: 50,
+            ticket_price: 1000,
+        });
         setCreateModalOpen(true);
     };
 
