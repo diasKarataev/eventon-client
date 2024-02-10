@@ -47,6 +47,26 @@ const ProfilePage: React.FC = () => {
             return 'Unknown Event';
         }
     };
+    const handleResendActivation = async () => {
+        try {
+            await UserService.resendActivationLink();
+            // Дополнительные действия после успешной отправки письма (если необходимо)
+            console.log('Activation email sent successfully!');
+        } catch (error) {
+            console.error('Error resending activation email:', error);
+        }
+    };
+
+    const toggleSubscription = async () => {
+        try {
+            await UserService.toggleSubscription(store.user.id);
+            // Обновляем данные профиля после изменения подписки
+            const updatedUserData = await UserService.getProfile();
+            setUserData(updatedUserData.data);
+        } catch (error) {
+            console.error('Error toggling subscription:', error);
+        }
+    };
 
     const calculateAge = (birthDate: string | undefined): number | null => {
         if (!birthDate) return null;
@@ -84,7 +104,19 @@ const ProfilePage: React.FC = () => {
                             <p>Age: {calculateAge(userData.birthDate)}</p>
                         )}
                         {store.user.role == "ADMIN" ? <p>Role: <a style={{color: 'red'}}>{store.user.role}</a></p> : ''}
-                        {store.user.isActivated ? '' : <p style={{color: 'red'}}>Активируйте аккаунт по почте</p>}
+                        {store.user.isActivated ? '' :<>
+                            <p style={{color: 'red'}}>Активируйте аккаунт по почте</p>
+                            <button onClick={handleResendActivation}>
+                            Отправить на почту письмо с активацией
+                            </button>
+                        </>
+                        }
+                        <div>
+                        <button onClick={toggleSubscription}>
+                            {userData?.isSubscribed ? 'Отписаться от рассылки' : 'Подписаться на рассылку'}
+                        </button>
+                        </div>
+
                     </div>
                 </div>
                 <UploadProfilePicture/>

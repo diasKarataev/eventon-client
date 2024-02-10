@@ -8,4 +8,5 @@ export interface IUserInformation {
     surname: string,
     birthDate: string;
     role: string;
+    isSubscribed: boolean;
 }

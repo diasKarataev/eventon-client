@@ -34,4 +34,10 @@ export default class UserService {
         formData.append('image', file);
         return $api.post(`/image/user`, formData);
     }
+    static toggleSubscription(userId: string): Promise<AxiosResponse<boolean>> {
+        return $api.post<boolean>(`/users/${userId}/toggle-subscription`);
+    }
+    static resendActivationLink(): Promise<AxiosResponse<string>> {
+        return $api.post<string>('/users/resend-activation-link');
+    }
 }

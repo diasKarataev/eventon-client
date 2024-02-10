@@ -16,6 +16,7 @@ import Dashboard from "./components/admin/Dashboard";
 import Users from "./components/admin/Users";
 import Events from "./components/admin/Events";
 import Orders from "./components/admin/Orders";
+import Mailing from "./components/admin/Mailing";
 
 
 const App: FC = () => {
@@ -43,6 +44,7 @@ const App: FC = () => {
                     <Route path="events" element={<Events />} />
                     <Route path="users" element={<Users />} />
                     <Route path="orders" element={<Orders />} />
+                    <Route path="mailing" element={<Mailing />} />
                     <Route path="dashboard" element={<Dashboard />} />
                 </Route>
                 <Route path="/" element={<Home />} />

@@ -34,7 +34,7 @@ export const areaPlotOptions = {
         },
         title: {
             display: true,
-            text: 'Chart.js Line Chart',
+            text: 'Статистика продаж',
         },
     },
 };
@@ -70,7 +70,7 @@ const Dashboard: FC = () => {
                     datasets: [
                         {
                             fill: true,
-                            label: 'Amount in Fiat',
+                            label: 'Цена покупки в KZT',
                             data: data,
                             borderColor: 'rgb(53, 162, 235)',
                             backgroundColor: 'rgba(53, 162, 235, 0.5)',
