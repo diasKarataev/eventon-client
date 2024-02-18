@@ -3,5 +3,10 @@ export interface IUserInformation {
     email: string,
     password: string,
     activationLink: string,
-    profilePictureId: string
+    profilePictureId: string,
+    name: string,
+    surname: string,
+    birthDate: string;
+    role: string;
+    isSubscribed: boolean;
 }

@@ -28,7 +28,6 @@ const ProfilePage: React.FC = () => {
                 setUserData(userData.data);
                 setUserTickets(userTickets.data);
 
-                // Fetch event names for each ticket
                 const names = await Promise.all(userTickets.data.map((ticket) => getEventNameById(ticket.event)));
                 setEventNames(names);
             } catch (error) {
@@ -48,52 +47,74 @@ const ProfilePage: React.FC = () => {
             return 'Unknown Event';
         }
     };
-
-    const handleMakeAdmin = async () => {
+    const handleResendActivation = async () => {
         try {
-            await UserService.makeAdmin();
-            // You might want to refresh the user data or take other actions
-            window.location.reload();
+            await UserService.resendActivationLink();
+            // Дополнительные действия после успешной отправки письма (если необходимо)
+            console.log('Activation email sent successfully!');
         } catch (error) {
-            console.error('Error making user an admin:', error);
+            console.error('Error resending activation email:', error);
         }
     };
 
-    const handleMakeUser = async () => {
+    const toggleSubscription = async () => {
         try {
-            await UserService.makeUser();
-            // You might want to refresh the user data or take other actions
-            window.location.reload();
+            await UserService.toggleSubscription(store.user.id);
+            // Обновляем данные профиля после изменения подписки
+            const updatedUserData = await UserService.getProfile();
+            setUserData(updatedUserData.data);
         } catch (error) {
-            console.error('Error making user a regular user:', error);
+            console.error('Error toggling subscription:', error);
         }
+    };
+
+    const calculateAge = (birthDate: string | undefined): number | null => {
+        if (!birthDate) return null;
+
+        const birthDateObj = new Date(birthDate);
+        const today = new Date();
+        let age = today.getFullYear() - birthDateObj.getFullYear();
+        const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+            age--;
+        }
+
+        return age;
     };
 
     return (
         <>
             <div className="container-profile">
-                <div className="back-link"><a href='/'><TbArrowBackUp/></a></div>
+                <div className="back-link"><Link to={'/'}><TbArrowBackUp/></Link></div>
                 <h1>Profile Page</h1>
                 <div className="profile-info">
                     <div className="profile-picture">
                         {userData?.profilePictureId != null ? (
-                        <img src={`${API_URL}/image/${userData.profilePictureId}`} alt="Profile" />
+                            <img src={`${API_URL}/image/${userData.profilePictureId}`} alt="Profile"/>
                         ) : (
-                            <p>No profile picture</p>
+                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Profile"/>
                         )}
                     </div>
                     <div className="profile-details">
                         <p>Email: {userData?.email}</p>
-                        <p>Name: Eren</p>
-                        <p>Surname: Yeager</p>
-                        <p>Password: Infinitive123</p>
-
-                        <div className="role-button">
-                            {store.user.role === 'ADMIN' ? (
-                                <button className="admin-button" onClick={handleMakeUser}>Make User</button>
-                            ) : (
-                                <button className="user-button" onClick={handleMakeAdmin}>Make Admin</button>
-                            )}
+                        <p>Name: {userData?.name}</p>
+                        <p>Surname: {userData?.surname}</p>
+                        {userData?.birthDate && (
+                            <p>Age: {calculateAge(userData.birthDate)}</p>
+                        )}
+                        {store.user.role == "ADMIN" ? <p>Role: <a style={{color: 'red'}}>{store.user.role}</a></p> : ''}
+                        {store.user.isActivated ? '' :<>
+                            <p style={{color: 'red'}}>Активируйте аккаунт по почте</p>
+                            <button onClick={handleResendActivation}>
+                            Отправить на почту письмо с активацией
+                            </button>
+                        </>
+                        }
+                        <div>
+                        <button onClick={toggleSubscription}>
+                            {userData?.isSubscribed ? 'Отписаться от рассылки' : 'Подписаться на рассылку'}
+                        </button>
                         </div>
 
                     </div>
@@ -101,13 +122,43 @@ const ProfilePage: React.FC = () => {
                 <UploadProfilePicture/>
                 <h2 className='ticket-header'>Tickets</h2>
                 <div className="ticket-container">
-                    {userTickets.map((ticket, index) => (
-                        <div className="ticket" key={ticket.id}>
-                            <h4>{eventNames[index]}</h4>
-                            <QRCode className="qr-code" value={API_URL + '/tickets/check-ticket/' + ticket.activationLink} />
-                        </div>
-                    ))}
+                    {userTickets.length > 0 ? (
+                        userTickets
+                            .filter(ticket => ticket.isPayed && !ticket.isActivated)
+                            .map((ticket, index) => (
+                                <div className="ticket" key={ticket.id}>
+                                    <>
+                                        <h4>{eventNames[index]}</h4>
+                                        <QRCode
+                                            className="qr-code"
+                                            value={API_URL + '/tickets/check-ticket/' + ticket.activationLink}
+                                        />
+                                    </>
+                                </div>
+                            ))
+                    ) : (
+                        <p style={{textAlign: 'center'}}>You have no tickets</p>
+                    )}
                 </div>
+                <div>
+                    {userTickets.some(ticket => !ticket.isPayed && !ticket.isActivated) && (
+                        <h2 className='ticket-header'>Неоплаченные билеты:</h2>
+                    )}
+                    <div className="ticket-container">
+                        {userTickets
+                            .filter(ticket => !ticket.isPayed && !ticket.isActivated)
+                            .map((ticket, index) => (
+                                <div className="ticket" key={ticket.id}>
+                                    <h4>{eventNames[index]}</h4>
+                                    <button className="btn btn-success"
+                                            onClick={() => window.location.href = `https://pay.cryptocloud.plus/${ticket.invoice_id}`}>
+                                        Оплатить
+                                    </button>
+                                </div>
+                            ))}
+                    </div>
+                </div>
+
             </div>
         </>
     );

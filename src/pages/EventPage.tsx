@@ -4,7 +4,6 @@ import { Container, Row, Col, Button, Form, Card, Image } from 'react-bootstrap'
 import EventService from '../services/EventService';
 import { IEvent } from '../models/iEvent';
 import { Context } from "../index";
-import UploadEventPicture from "../components/UploadEventPicture";
 import { API_URL } from "../http";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {observer} from "mobx-react-lite";
@@ -48,17 +47,6 @@ const EventPage: React.FC = () => {
         }
     };
 
-    const handleDeleteImage = async (imageId: string) => {
-        try {
-            const response = await EventService.deleteImage(imageId);
-            // Обновите состояние или выполните другие действия после успешного удаления
-            console.log('Image deleted successfully:', response.data);
-            window.location.reload();
-        } catch (error) {
-            console.error('Error deleting image:', error);
-        }
-    };
-
     return (
         <Container className="mt-4">
             {eventData ? (
@@ -66,12 +54,12 @@ const EventPage: React.FC = () => {
                     <Row>
                         <Card>
                             <Card.Body>
-                                <Card.Title>{eventData.title}</Card.Title>
+                                <Card.Title>{eventData?.title}</Card.Title>
                                 <Card.Text>
                                     <p>Event ID: {eventId}</p>
-                                    <p>Event capacity: {eventData.capacity}</p>
-                                    <p>Ticket price: {eventData.ticket_price}</p>
-                                    <p>{eventData.date}</p>
+                                    <p>Event capacity: {eventData?.capacity}</p>
+                                    <p>Ticket price: {eventData?.ticket_price}</p>
+                                    <p>{eventData?.date}</p>
                                     <Form>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Seat Row:</Form.Label>
@@ -81,45 +69,34 @@ const EventPage: React.FC = () => {
                                             <Form.Label>Seat Number:</Form.Label>
                                             <Form.Control type="number" value={seatNumber} onChange={(e) => setSeatNumber(parseInt(e.target.value, 10))} />
                                         </Form.Group>
-                                        <Button variant="success" onClick={handleBuyTicket} disabled={isBuyButtonDisabled}>
+                                        <Button variant="success" onClick={handleBuyTicket}>
                                             Купить билет
                                         </Button>
                                     </Form>
-                                    <Link to="/" className="btn btn-secondary mt-3">
-                                        Обратно
-                                    </Link>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
                     </Row>
 
-                    <Col md={12} className="mt-4">
-                        <h4>Event Images:</h4>
-                        <Row>
-                            {eventData.imagesIds && Array.isArray(eventData.imagesIds) ? (
-                                eventData.imagesIds.map((imageId: string) => (
+                    {eventData?.imagesIds && Array.isArray(eventData.imagesIds) && eventData.imagesIds.length > 0 && (
+                        <Col md={12} className="mt-4">
+                            <h4>Event Images:</h4>
+                            <Row>
+                                {eventData.imagesIds.map((imageId: string) => (
                                     <Col md={2} key={imageId}>
                                         <Card className="mb-3">
-                                            <Image src={`${API_URL}/image/${imageId}`} alt={`Event Image ${imageId}`} fluid style={{objectFit: 'cover', height: '100px'}}/>
+                                            <Image src={`${API_URL}/image/${imageId}`} alt={`Event Image ${imageId}`} fluid style={{ objectFit: 'cover', height: '100px' }} />
                                             <Card.Body>
-                                                <Button variant="danger" onClick={() => handleDeleteImage(imageId)}>
-                                                    Удалить
-                                                </Button>
                                                 <Link to={`${API_URL}/image/${imageId}`} className="btn btn-success mt-3">
                                                     Посмотреть
                                                 </Link>
                                             </Card.Body>
                                         </Card>
                                     </Col>
-                                ))
-                            ) : (
-                                <Col md={12}>This event has no pictures</Col>
-                            )}
-                        </Row>
-                    </Col>
-                    <Row>
-                        <UploadEventPicture eventId={eventId!} />
-                    </Row>
+                                ))}
+                            </Row>
+                        </Col>
+                    )}
                 </Row>
             ) : (
                 <p>Loading...</p>

@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Store from './store/store'
-
+import { BrowserRouter as Router } from 'react-router-dom';
+import Modal from 'react-modal';
 
 interface State {
     store: Store
@@ -14,7 +15,7 @@ const store = new Store();
 export const Context = createContext<State>({
     store,
 })
-
+Modal.setAppElement('#root');
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

@@ -24,5 +24,30 @@
         static deleteImage(imageId: string): Promise<AxiosResponse> {
             return $api.delete(`/image/${imageId}`);
         }
+        static deleteEvent(eventId: string): Promise<AxiosResponse> {
+            return $api.delete(`/events/${eventId}`);
+        }
+        static createEvent(eventData: {
+            title: string,
+            description: string,
+            capacity: number,
+            ticket_price: number,
+            city: string
+        }): Promise<AxiosResponse> {
+            return $api.post(`/events`, eventData);
+        }
 
+        static updateEvent(eventId: string, eventData: {
+            title: string,
+            description: string,
+            capacity: number,
+            ticket_price: number,
+            city: string
+        }): Promise<AxiosResponse> {
+            return $api.patch(`/events/${eventId}`, eventData);
+        }
+
+        static getPaymentLink(ticketId: string): Promise<AxiosResponse<string>> {
+            return $api.get<string>(`/tickets/paymentlink/${ticketId}`);
+        }
     }
