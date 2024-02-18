@@ -31,7 +31,8 @@
             title: string,
             description: string,
             capacity: number,
-            ticket_price: number
+            ticket_price: number,
+            city: string
         }): Promise<AxiosResponse> {
             return $api.post(`/events`, eventData);
         }
@@ -40,8 +41,13 @@
             title: string,
             description: string,
             capacity: number,
-            ticket_price: number
+            ticket_price: number,
+            city: string
         }): Promise<AxiosResponse> {
             return $api.patch(`/events/${eventId}`, eventData);
+        }
+
+        static getPaymentLink(ticketId: string): Promise<AxiosResponse<string>> {
+            return $api.get<string>(`/tickets/paymentlink/${ticketId}`);
         }
     }
