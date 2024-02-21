@@ -7,6 +7,7 @@ import { Context } from "../index";
 import { API_URL } from "../http";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {observer} from "mobx-react-lite";
+import MapComponent from "../components/MapComponent";
 
 const EventPage: React.FC = () => {
     const { eventId } = useParams<{ eventId?: string }>();
@@ -58,16 +59,19 @@ const EventPage: React.FC = () => {
                                 <Card.Text>
                                     <p>Event ID: {eventId}</p>
                                     <p>Event capacity: {eventData?.capacity}</p>
+                                    <p>City: {eventData?.city}</p>
                                     <p>Ticket price: {eventData?.ticket_price}</p>
                                     <p>{eventData?.date}</p>
                                     <Form>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Seat Row:</Form.Label>
-                                            <Form.Control type="number" value={seatRow} onChange={(e) => setSeatRow(parseInt(e.target.value, 10))} />
+                                            <Form.Control type="number" value={seatRow}
+                                                          onChange={(e) => setSeatRow(parseInt(e.target.value, 10))}/>
                                         </Form.Group>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Seat Number:</Form.Label>
-                                            <Form.Control type="number" value={seatNumber} onChange={(e) => setSeatNumber(parseInt(e.target.value, 10))} />
+                                            <Form.Control type="number" value={seatNumber}
+                                                          onChange={(e) => setSeatNumber(parseInt(e.target.value, 10))}/>
                                         </Form.Group>
                                         <Button variant="success" onClick={handleBuyTicket}>
                                             Купить билет
@@ -85,9 +89,11 @@ const EventPage: React.FC = () => {
                                 {eventData.imagesIds.map((imageId: string) => (
                                     <Col md={2} key={imageId}>
                                         <Card className="mb-3">
-                                            <Image src={`${API_URL}/image/${imageId}`} alt={`Event Image ${imageId}`} fluid style={{ objectFit: 'cover', height: '100px' }} />
+                                            <Image src={`${API_URL}/image/${imageId}`} alt={`Event Image ${imageId}`}
+                                                   fluid style={{objectFit: 'cover', height: '100px'}}/>
                                             <Card.Body>
-                                                <Link to={`${API_URL}/image/${imageId}`} className="btn btn-success mt-3">
+                                                <Link to={`${API_URL}/image/${imageId}`}
+                                                      className="btn btn-success mt-3">
                                                     Посмотреть
                                                 </Link>
                                             </Card.Body>
@@ -101,7 +107,9 @@ const EventPage: React.FC = () => {
             ) : (
                 <p>Loading...</p>
             )}
+            <MapComponent latitude={eventData?.map_latitude} longitude={eventData?.map_longitude} />
         </Container>
+
     );
 };
 

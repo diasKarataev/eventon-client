@@ -8,6 +8,7 @@ import {Button, Card, Col, Image, Row} from "react-bootstrap";
 import {API_URL} from "../../http";
 import UploadEventPicture from "../UploadEventPicture";
 import './Events.css';
+import EditMap from "../EditMap";
 
 
 
@@ -19,11 +20,21 @@ const Events: FC = () => {
         description: '',
         capacity: 50,
         ticket_price: 1000,
+        city: '',
+        map_latitude: 0,
+        map_longitude: 0
     });
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
     const [editEvent, setEditEvent] = useState<IEvent | null>(null);
-
+    const handleCoordinatesChange = (latitude: number, longitude: number) => {
+        setNewEvent(prevState => ({
+            ...prevState,
+            map_latitude: latitude,
+            map_longitude: longitude,
+        }));
+        console.log(latitude + " " + longitude)
+    };
 
     const handleDeleteImage = async (imageId: string) => {
         try {
@@ -46,6 +57,9 @@ const Events: FC = () => {
                 description: response.data.description,
                 capacity: response.data.capacity,
                 ticket_price: response.data.ticket_price,
+                city: response.data.city,
+                map_longitude: response.data.map_longitude,
+                map_latitude: response.data.map_latitude
             });
 
             setEditModalOpen(true);
@@ -97,6 +111,9 @@ const Events: FC = () => {
             description: '',
             capacity: 50,
             ticket_price: 1000,
+            city: '',
+            map_latitude: 0,
+            map_longitude: 0
         });
         setCreateModalOpen(true);
     };
@@ -229,6 +246,18 @@ const Events: FC = () => {
                             />
                         </div>
                         <div className="mb-3">
+                            <label htmlFor="city" className="form-label">
+                                City
+                            </label>
+                            <textarea
+                                className="form-control"
+                                id="city"
+                                name="city"
+                                value={newEvent.city}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="mb-3">
                             <label htmlFor="capacity" className="form-label">
                                 Capacity
                             </label>
@@ -254,6 +283,11 @@ const Events: FC = () => {
                                 onChange={handleChange}
                             />
                         </div>
+                        <EditMap
+                            latitude={newEvent.map_latitude}
+                            longitude={newEvent.map_longitude}
+                            onCoordinatesChange={(latitude, longitude) => handleCoordinatesChange(latitude, longitude)}
+                        />
                         <button type="button" className="btn btn-primary" onClick={handleCreateEvent}>
                             Create
                         </button>
@@ -267,8 +301,8 @@ const Events: FC = () => {
                 isOpen={isEditModalOpen}
                 onRequestClose={closeEditModal}
                 contentLabel="Edit Event Modal"
-                shouldCloseOnOverlayClick={false}  // Prevent closing on overlay click
-                shouldCloseOnEsc={false}  // Prevent closing on Escape key
+                shouldCloseOnOverlayClick={false}
+                shouldCloseOnEsc={false}
                 className={{
                     base: 'custom-modal',
                     afterOpen: 'custom-modal-content',
@@ -305,6 +339,18 @@ const Events: FC = () => {
                                 id="description"
                                 name="description"
                                 value={newEvent.description}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="city" className="form-label">
+                                City
+                            </label>
+                            <textarea
+                                className="form-control"
+                                id="city"
+                                name="city"
+                                value={newEvent.city}
                                 onChange={handleChange}
                             />
                         </div>
@@ -362,7 +408,11 @@ const Events: FC = () => {
                         <Row>
                             <UploadEventPicture eventId={selectedEventId!}/>
                         </Row>
-
+                        <EditMap
+                            latitude={newEvent.map_latitude}
+                            longitude={newEvent.map_longitude}
+                            onCoordinatesChange={(latitude, longitude) => handleCoordinatesChange(latitude, longitude)}
+                        />
                         <div className="d-flex flex-column mt-3">
                             <button type="button" className="btn btn-primary flex-grow-1" onClick={handleEditEvent}>
                                 Save
