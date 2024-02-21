@@ -6,4 +6,7 @@ export interface IEvent {
     capacity: number;
     date: string;
     imagesIds : string;
+    city: string;
+    map_latitude: number;
+    map_longitude: number;
 }

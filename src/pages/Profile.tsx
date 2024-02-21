@@ -83,6 +83,19 @@ const ProfilePage: React.FC = () => {
         return age;
     };
 
+    const handlePayment = async (ticket: string) => {
+        try {
+            const paymentLinkResponse = await EventService.getPaymentLink(ticket);
+            if (paymentLinkResponse.data) {
+                window.location.href = paymentLinkResponse.data;
+            } else {
+                console.error('Payment link not found in response:', paymentLinkResponse);
+            }
+        } catch (error) {
+            console.error('Error getting payment link:', error);
+        }
+    };
+
     return (
         <>
             <div className="container-profile">
@@ -124,7 +137,7 @@ const ProfilePage: React.FC = () => {
                 <div className="ticket-container">
                     {userTickets.length > 0 ? (
                         userTickets
-                            .filter(ticket => ticket.isPayed && !ticket.isActivated)
+                            .filter(ticket => ticket.isPaid && !ticket.isActivated)
                             .map((ticket, index) => (
                                 <div className="ticket" key={ticket.id}>
                                     <>
@@ -141,17 +154,17 @@ const ProfilePage: React.FC = () => {
                     )}
                 </div>
                 <div>
-                    {userTickets.some(ticket => !ticket.isPayed && !ticket.isActivated) && (
+                    {userTickets.some(ticket => !ticket.isPaid && !ticket.isActivated) && (
                         <h2 className='ticket-header'>Неоплаченные билеты:</h2>
                     )}
                     <div className="ticket-container">
                         {userTickets
-                            .filter(ticket => !ticket.isPayed && !ticket.isActivated)
+                            .filter(ticket => !ticket.isPaid && !ticket.isActivated)
                             .map((ticket, index) => (
                                 <div className="ticket" key={ticket.id}>
                                     <h4>{eventNames[index]}</h4>
                                     <button className="btn btn-success"
-                                            onClick={() => window.location.href = `https://pay.cryptocloud.plus/${ticket.invoice_id}`}>
+                                            onClick={() => handlePayment(ticket.id)}>
                                         Оплатить
                                     </button>
                                 </div>
