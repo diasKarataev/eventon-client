@@ -1,0 +1,14 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Trigger Jenkins Pipeline
+      run: curl -X POST http://20.117.173.175:8080/job/CI%20eventon-client/build --user root:${{ secrets.JENKINS_TOKEN }}
